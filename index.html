@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Revista</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#e9e7e2;--bar:#ffffff;--fg:#1d1d1b;--mut:#76736c;--line:#d6d3cc;--acc:#1d1d1b;--accfg:#fff;--hov:rgba(120,120,120,.16);--act:#0a8fb8;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16161a;--bar:#25252c;--fg:#f1efe9;--mut:#9a98a0;--line:#383841;--acc:#f1efe9;--accfg:#16161a;--act:#4cc3e8;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#16161a;--bar:#25252c;--fg:#f1efe9;--mut:#9a98a0;--line:#383841;--acc:#f1efe9;--accfg:#16161a;--act:#4cc3e8;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*,*::before,*::after{box-sizing:inherit;font-family:'Century Gothic',CenturyGothic,'URW Gothic',sans-serif}
+[hidden]{display:none!important}
+body{margin:0;height:100%;background:var(--bg);color:var(--fg);display:flex;flex-direction:column}
+header{background:var(--bar);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;flex-wrap:wrap}
+h1{font-size:15px;font-weight:600;letter-spacing:.04em;margin:0;text-transform:uppercase}
+.btn{font-size:13px;color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer}
+.btn:hover{border-color:var(--fg)}
+.pri{background:var(--acc);color:var(--accfg);border-color:var(--acc)}
+#stage{flex:1;min-height:0;position:relative;overflow:hidden}
+#scroll{position:absolute;inset:0;overflow:auto;display:flex}
+#zoomer{flex:none;margin:auto;width:100%;height:100%;padding:20px 20px 88px}
+#book{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+#prog{position:absolute;left:0;top:0;height:3px;background:var(--act);width:0;transition:width .15s;z-index:6}
+#empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:24px;border:2px dashed var(--line);border-radius:20px;margin:20px}
+#empty{border:0;margin:0;border-radius:0;background:var(--bg);z-index:7}
+#empty p{color:var(--mut);margin:0;font-size:14px;max-width:420px}
+#bar{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:2px;padding:6px 10px;border-radius:999px;background:var(--bar);border:1px solid var(--line);box-shadow:0 8px 28px rgba(0,0,0,.18);max-width:calc(100% - 16px);overflow-x:auto}
+.ib{flex:none;width:38px;height:38px;border-radius:50%;border:0;background:transparent;color:var(--fg);display:grid;place-items:center;padding:0;cursor:pointer}
+.ib:hover:not(:disabled){background:var(--hov)}
+.ib:disabled{opacity:.3;cursor:default}
+.ib.act{color:var(--act)}
+.ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sep{flex:none;width:1px;height:22px;background:var(--line);margin:0 6px}
+#pgw{flex:none;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mut);padding:0 6px}
+#pg{width:44px;height:30px;text-align:center;font-size:13px;color:var(--fg);background:var(--hov);border:1px solid transparent;border-radius:999px;outline:0}
+#pg:focus{border-color:var(--act)}
+#thumbs{position:absolute;inset:0;z-index:4;background:var(--bg);overflow:auto;padding:20px 20px 90px}
+#tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:16px}
+.th{cursor:pointer;text-align:center;font-size:12px;color:var(--mut)}
+.th img{width:100%;display:block;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.2);border:2px solid transparent}
+.th.cur img,.th:hover img{border-color:var(--act)}
+.th span{display:block;margin-top:6px}
+input[type=file]{display:none}
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title"></h1>
+</header>
+<main id="stage">
+  <div id="prog"></div>
+  <div id="scroll"><div id="zoomer"><div id="book"></div></div></div>
+  <div id="thumbs" hidden><div id="tgrid"></div></div>
+  <div id="empty">
+    <strong id="ltxt">Loading...</strong>
+    <p>Loading document...</p>
+  </div>
+  <nav id="bar" hidden>
+    <button class="ib" id="prev" title="Página anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div id="pgw"><input id="pg" type="text" inputmode="numeric" aria-label="Ir a la página"><span id="tot">/ 1</span></div>
+    <button class="ib" id="next" title="Página siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    <span class="sep"></span>
+    <button class="ib" id="tb" title="Miniaturas"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1"/></svg></button>
+    <button class="ib" id="zin" title="Acercar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M8.5 11h5M11 8.5v5"/></svg></button>
+    <button class="ib" id="zout" title="Alejar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M8.5 11h5"/></svg></button>
+    <button class="ib act" id="fit" title="Ajustar a pantalla"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg></button>
+    <button class="ib" id="fs" title="Pantalla completa"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button>
+  </nav>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+<script>
+// ====== CONFIGURACIÓN ======
+const PDF_URL = 'portfolio.pdf';          // el PDF que va en la misma carpeta que este index.html
+const TITLE   = 'DAZ | Arquitectura + Construcción / PROJECTS_ARCHIVE';   // título que se muestra arriba
+// ===========================
+const $ = s => document.querySelector(s);
+let flip = null, total = 0, orig = 0, padIdx = -1, ratio = 1.414, zoom = 1, thumbs = [], busy = false;
+const ctrls = ['prev','next','pg','tb','zin','zout','fit','fs'].map(i => $('#' + i));
+if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+function setProg(p){ $('#prog').style.width = (p * 100) + '%'; if (p >= 1) setTimeout(() => $('#prog').style.width = '0', 300); }
+
+// Número de página mostrado (la página en blanco de relleno no cuenta)
+function num(i){ return (padIdx < 0 || i < padIdx) ? i + 1 : (i === padIdx ? padIdx : i); }
+function idxOf(v){ return (padIdx < 0 || v <= padIdx) ? v - 1 : v; }
+
+// Portada y contraportada se ven solas: se centran en pantalla
+function shiftBook(kind, clip = true){
+  const el = $('#book').firstChild; if (!el) return;
+  const w = el.offsetWidth, land = w >= 520;
+  const x = land ? (kind === 'cover' ? -w / 4 : kind === 'back' ? w / 4 : 0) : 0;
+  el.style.transform = 'translateX(' + x + 'px)';
+  // Recorta la mitad vacía que la librería dibuja junto a la portada / contraportada, para que quede una sola página
+  el.style.clipPath = !(clip && land) ? 'none' : kind === 'cover' ? 'inset(0 0 0 50%)' : kind === 'back' ? 'inset(0 50% 0 0)' : 'none';
+}
+function center(i){
+  if (!flip) return;
+  shiftBook(i <= 0 ? 'cover' : (i >= total - 1 && total % 2 === 0 ? 'back' : 'mid'));
+}
+// Al volver a la portada o ir a la contraportada, el libro se centra al mismo tiempo que gira la hoja
+function go(dir){
+  if (!flip) return;
+  const i = flip.getCurrentPageIndex();
+  if (dir > 0 && total % 2 === 0 && i >= total - 3 && i < total - 1) shiftBook('back', false);
+  if (dir < 0 && i > 0 && i <= 2) shiftBook('cover', false);
+  dir > 0 ? flip.flipNext() : flip.flipPrev();
+}
+
+function sizeBook(){
+  const h = $('#book'), el = h.firstChild; if (!el) return;
+  const aw = h.clientWidth, ah = h.clientHeight;
+  let w = Math.min(aw, ah * 2 / ratio);
+  if (w < 520) w = Math.min(aw, ah / ratio, 519);
+  el.style.width = Math.max(120, Math.floor(w)) + 'px';
+  if (flip){
+    busy = true;
+    try { flip.update(); } catch(e){}
+    window.dispatchEvent(new Event('resize'));
+    busy = false;
+    setTimeout(() => flip && center(flip.getCurrentPageIndex()), 60);
+  }
+}
+
+function updInfo(i){
+  $('#pg').value = num(i);
+  $('#tot').textContent = '/ ' + orig;
+  $('#prev').disabled = i <= 0;
+  $('#next').disabled = i >= total - 1;
+  document.querySelectorAll('.th').forEach(t => t.classList.toggle('cur', +t.dataset.i === i));
+  center(i);
+}
+
+function blank(w, h){
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, w, h);
+  return c.toDataURL('image/jpeg', 0.5);
+}
+function thumb(c){
+  const t = document.createElement('canvas'); t.width = 150; t.height = Math.round(150 * c.height / c.width);
+  t.getContext('2d').drawImage(c, 0, 0, t.width, t.height);
+  return t.toDataURL('image/jpeg', 0.6);
+}
+
+function buildThumbs(){
+  const g = $('#tgrid'); g.innerHTML = '';
+  thumbs.forEach((src, i) => {
+    const d = document.createElement('div'); d.className = 'th'; d.dataset.i = i;
+    const im = new Image(); im.src = src; im.alt = '';
+    const s = document.createElement('span'); s.textContent = i === padIdx ? '' : num(i);
+    d.append(im, s);
+    d.onclick = () => { closeThumbs(); goTo(i); };
+    g.appendChild(d);
+  });
+}
+function closeThumbs(){ $('#thumbs').hidden = true; $('#tb').classList.remove('act'); }
+function goTo(i){ if (!flip) return; flip.turnToPage(i); setTimeout(() => updInfo(flip.getCurrentPageIndex()), 80); }
+
+function build(imgs, th, r){
+  if (flip){ try { flip.destroy(); } catch(e){} flip = null; }
+  ratio = r; orig = imgs.length; padIdx = -1; imgs = imgs.slice(); th = th.slice();
+  // Si el total es impar, se agrega una hoja en blanco antes de la contraportada para que quede sola, como en una revista
+  if (orig >= 3 && orig % 2 === 1){
+    const b = blank(400, Math.round(400 * r)); padIdx = orig - 1;
+    imgs.splice(padIdx, 0, b); th.splice(padIdx, 0, b);
+  }
+  total = imgs.length; thumbs = th;
+  const host = $('#book'); host.innerHTML = '';
+  const el = document.createElement('div'); host.appendChild(el);
+  $('#empty').style.display = 'none'; $('#bar').hidden = false; closeThumbs();
+  ctrls.forEach(b => b.disabled = false);
+  zoom = 1; const zm = $('#zoomer'); zm.style.width = zm.style.height = '100%';
+  sizeBook();
+  flip = new St.PageFlip(el, {
+    width: 500, height: Math.round(500 * r), size: 'stretch',
+    minWidth: 260, maxWidth: 2400, minHeight: 320, maxHeight: 3600,
+    showCover: true, usePortrait: true, mobileScrollSupport: false,
+    maxShadowOpacity: 0.45, flippingTime: 800, startPage: 0
+  });
+  flip.loadFromImages(imgs);
+  el.style.transition = 'transform .45s ease';
+  flip.on('flip', e => updInfo(e.data));
+  flip.on('changeOrientation', () => updInfo(flip.getCurrentPageIndex()));
+  flip.on('changeState', e => {
+    const i = flip.getCurrentPageIndex();
+    if (e.data === 'read') center(i);
+    else if (e.data === 'user_fold' || e.data === 'flipping'){
+      if (e.data === 'flipping' && (i === 0 || (i >= total - 1 && total % 2 === 0))) shiftBook('mid');
+      else el.style.clipPath = 'none';
+    }
+  });
+  buildThumbs(); setZoomUI(); updInfo(0);
+  setTimeout(sizeBook, 80);
+}
+
+async function loadPDF(){
+  document.title = TITLE; $('#title').textContent = TITLE;
+  setProg(0.02);
+  try {
+    if (!window.pdfjsLib) throw new Error('pdf.js no cargó');
+    const pdf = await pdfjsLib.getDocument({ url: PDF_URL }).promise;
+    const n = Math.min(pdf.numPages, 300);
+    const imgs = [], th = []; let r = 1.414;
+    for (let i = 1; i <= n; i++){
+      const page = await pdf.getPage(i);
+      const v0 = page.getViewport({ scale: 1 });
+      if (i === 1) r = v0.height / v0.width;
+      const vp = page.getViewport({ scale: 1100 / v0.width });
+      const c = document.createElement('canvas'); c.width = vp.width; c.height = vp.height;
+      await page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
+      imgs.push(c.toDataURL('image/jpeg', 0.86)); th.push(thumb(c));
+      setProg(i / n); $('#ltxt').textContent = 'Cargando… ' + Math.round(i / n * 100) + '%';
+    }
+    build(imgs, th, r);
+  } catch (err){
+    console.error(err); setProg(1);
+    $('#ltxt').textContent = 'Unable to load document.';
+  }
+}
+
+function setZoomUI(){
+  $('#zin').disabled = zoom >= 3; $('#zout').disabled = zoom <= 1;
+  $('#fit').classList.toggle('act', zoom === 1);
+}
+function setZoom(z){
+  if (!flip) return;
+  zoom = Math.max(1, Math.min(3, z));
+  const zm = $('#zoomer'); zm.style.width = zm.style.height = (zoom * 100) + '%';
+  sizeBook();
+  const sc = $('#scroll');
+  sc.scrollLeft = (sc.scrollWidth - sc.clientWidth) / 2; sc.scrollTop = (sc.scrollHeight - sc.clientHeight) / 2;
+  setZoomUI();
+}
+
+$('#prev').onclick = () => go(-1);
+$('#next').onclick = () => go(1);
+$('#zin').onclick = () => setZoom(zoom + 0.5);
+$('#zout').onclick = () => setZoom(zoom - 0.5);
+$('#fit').onclick = () => setZoom(1);
+$('#tb').onclick = () => { const t = $('#thumbs'); t.hidden = !t.hidden; $('#tb').classList.toggle('act', !t.hidden); };
+$('#fs').onclick = () => { const s = $('#stage'); document.fullscreenElement ? document.exitFullscreen() : (s.requestFullscreen && s.requestFullscreen()); };
+$('#pg').addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const v = Math.max(1, Math.min(orig, parseInt(e.target.value, 10) || 1));
+  goTo(idxOf(v)); e.target.blur();
+});
+$('#pg').addEventListener('focus', e => e.target.select());
+document.addEventListener('keydown', e => {
+  if (!flip || e.target.tagName === 'INPUT') return;
+  if (e.key === 'ArrowRight') go(1);
+  if (e.key === 'ArrowLeft') go(-1);
+  if (e.key === 'Escape') closeThumbs();
+});
+window.addEventListener('resize', () => { if (!busy) sizeBook(); });
+
+loadPDF();
+</script>
+</body>
+</html>
