@@ -7,40 +7,46 @@
 <title>Revista</title>
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
-  --bg:#e9e7e2;--bar:#ffffff;--fg:#1d1d1b;--mut:#76736c;--line:#d6d3cc;--acc:#1d1d1b;--accfg:#fff;--hov:rgba(120,120,120,.16);--act:#0a8fb8;color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16161a;--bar:#25252c;--fg:#f1efe9;--mut:#9a98a0;--line:#383841;--acc:#f1efe9;--accfg:#16161a;--act:#4cc3e8;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#16161a;--bar:#25252c;--fg:#f1efe9;--mut:#9a98a0;--line:#383841;--acc:#f1efe9;--accfg:#16161a;--act:#4cc3e8;color-scheme:dark}
+  --bg:#e9e7e2;--g1:rgba(120,160,255,.30);--g2:rgba(255,176,120,.28);--fg:#1d1d1b;--mut:#6d6a63;--line:rgba(0,0,0,.10);
+  --glass:rgba(255,255,255,.52);--glassb:rgba(255,255,255,.7);--glassx:rgba(246,244,240,.8);--sh:0 10px 40px rgba(30,30,30,.15);
+  --hov:rgba(0,0,0,.07);--acc:#1d1d1b;--accfg:#fff;--act:#0a8fb8;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121216;--g1:rgba(90,110,255,.24);--g2:rgba(255,140,90,.15);--fg:#f1efe9;--mut:#9a98a0;--line:rgba(255,255,255,.10);--glass:rgba(38,38,48,.5);--glassb:rgba(255,255,255,.14);--glassx:rgba(24,24,30,.8);--sh:0 10px 40px rgba(0,0,0,.45);--hov:rgba(255,255,255,.09);--acc:#f1efe9;--accfg:#16161a;--act:#4cc3e8;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121216;--g1:rgba(90,110,255,.24);--g2:rgba(255,140,90,.15);--fg:#f1efe9;--mut:#9a98a0;--line:rgba(255,255,255,.10);--glass:rgba(38,38,48,.5);--glassb:rgba(255,255,255,.14);--glassx:rgba(24,24,30,.8);--sh:0 10px 40px rgba(0,0,0,.45);--hov:rgba(255,255,255,.09);--acc:#f1efe9;--accfg:#16161a;--act:#4cc3e8;color-scheme:dark}
 html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
 *,*::before,*::after{box-sizing:inherit;font-family:'Century Gothic',CenturyGothic,'URW Gothic',sans-serif}
 [hidden]{display:none!important}
-body{margin:0;height:100%;background:var(--bg);color:var(--fg);display:flex;flex-direction:column}
-header{background:var(--bar);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;flex-wrap:wrap}
-h1{font-size:15px;font-weight:600;letter-spacing:.04em;margin:0;text-transform:uppercase}
-.btn{font-size:13px;color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer}
-.btn:hover{border-color:var(--fg)}
+body{margin:0;height:100%;color:var(--fg);display:flex;flex-direction:column;background:radial-gradient(1000px 640px at 10% 6%,var(--g1),transparent 62%),radial-gradient(900px 640px at 94% 94%,var(--g2),transparent 62%),var(--bg);background-attachment:fixed}
+header,#bar,.btn{background:var(--glass);border:1px solid var(--glassb);-webkit-backdrop-filter:blur(22px) saturate(1.6);backdrop-filter:blur(22px) saturate(1.6)}
+header{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;padding:12px 20px;border-width:0 0 1px}
+h1{grid-column:2;margin:0;text-align:center;font-size:14px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60vw}
+.acts{grid-column:3;justify-self:end;display:flex;gap:8px}
+.btn{font-size:13px;color:var(--fg);border-radius:999px;padding:8px 18px;cursor:pointer}
+.btn:hover{background:var(--hov)}
 .pri{background:var(--acc);color:var(--accfg);border-color:var(--acc)}
+@media (max-width:560px){header{grid-template-columns:1fr}h1{grid-column:1;max-width:100%}.acts{grid-column:1;justify-self:center}}
 #stage{flex:1;min-height:0;position:relative;overflow:hidden}
 #scroll{position:absolute;inset:0;overflow:auto;display:flex}
 #zoomer{flex:none;margin:auto;width:100%;height:100%;padding:20px 20px 88px}
 #book{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
-#prog{position:absolute;left:0;top:0;height:3px;background:var(--act);width:0;transition:width .15s;z-index:6}
-#empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:24px;border:2px dashed var(--line);border-radius:20px;margin:20px}
-#empty{border:0;margin:0;border-radius:0;background:var(--bg);z-index:7}
+#prog{position:absolute;left:0;top:0;height:2px;background:var(--act);width:0;transition:width .15s;z-index:6}
+#empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:24px;border:1px dashed var(--line);border-radius:22px;margin:20px}
+#empty{border:0;margin:0;border-radius:0;background:var(--glassx);-webkit-backdrop-filter:blur(26px);backdrop-filter:blur(26px);z-index:7}
+#empty strong{font-weight:400;font-size:16px;letter-spacing:.08em}
 #empty p{color:var(--mut);margin:0;font-size:14px;max-width:420px}
-#bar{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:2px;padding:6px 10px;border-radius:999px;background:var(--bar);border:1px solid var(--line);box-shadow:0 8px 28px rgba(0,0,0,.18);max-width:calc(100% - 16px);overflow-x:auto}
-.ib{flex:none;width:38px;height:38px;border-radius:50%;border:0;background:transparent;color:var(--fg);display:grid;place-items:center;padding:0;cursor:pointer}
+#bar{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:2px;padding:6px 12px;border-radius:999px;box-shadow:var(--sh),inset 0 1px 0 var(--glassb);max-width:calc(100% - 16px);overflow-x:auto}
+.ib{flex:none;width:38px;height:38px;border-radius:50%;border:0;background:transparent;color:var(--fg);display:grid;place-items:center;padding:0;cursor:pointer;transition:background .15s}
 .ib:hover:not(:disabled){background:var(--hov)}
 .ib:disabled{opacity:.3;cursor:default}
 .ib.act{color:var(--act)}
-.ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .sep{flex:none;width:1px;height:22px;background:var(--line);margin:0 6px}
 #pgw{flex:none;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mut);padding:0 6px}
 #pg{width:44px;height:30px;text-align:center;font-size:13px;color:var(--fg);background:var(--hov);border:1px solid transparent;border-radius:999px;outline:0}
 #pg:focus{border-color:var(--act)}
-#thumbs{position:absolute;inset:0;z-index:4;background:var(--bg);overflow:auto;padding:20px 20px 90px}
-#tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:16px}
+#thumbs{position:absolute;inset:0;z-index:4;background:var(--glassx);-webkit-backdrop-filter:blur(26px) saturate(1.5);backdrop-filter:blur(26px) saturate(1.5);overflow:auto;padding:24px 24px 96px}
+#tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:18px}
 .th{cursor:pointer;text-align:center;font-size:12px;color:var(--mut)}
-.th img{width:100%;display:block;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.2);border:2px solid transparent}
+.th img{width:100%;display:block;border-radius:6px;box-shadow:0 4px 14px rgba(0,0,0,.22);border:2px solid transparent}
 .th.cur img,.th:hover img{border-color:var(--act)}
 .th span{display:block;margin-top:6px}
 input[type=file]{display:none}
@@ -55,8 +61,8 @@ input[type=file]{display:none}
   <div id="scroll"><div id="zoomer"><div id="book"></div></div></div>
   <div id="thumbs" hidden><div id="tgrid"></div></div>
   <div id="empty">
-    <strong id="ltxt">Loading...</strong>
-    <p>Loading document...</p>
+    <strong id="ltxt">Cargando…</strong>
+    <p>Preparando el documento, puede tardar unos segundos.</p>
   </div>
   <nav id="bar" hidden>
     <button class="ib" id="prev" title="Página anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
@@ -76,8 +82,8 @@ input[type=file]{display:none}
 <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
 <script>
 // ====== CONFIGURACIÓN ======
-const PDF_URL = 'portfolio.pdf';          // el PDF que va en la misma carpeta que este index.html
-const TITLE   = 'DAZ | Arquitectura + Construcción / PROJECTS_ARCHIVE';   // título que se muestra arriba
+const PDF_URL = 'documento.pdf';          // el PDF que va en la misma carpeta que este index.html
+const TITLE   = 'Nombre del documento';   // título que se muestra arriba
 // ===========================
 const $ = s => document.querySelector(s);
 let flip = null, total = 0, orig = 0, padIdx = -1, ratio = 1.414, zoom = 1, thumbs = [], busy = false;
@@ -198,28 +204,50 @@ function build(imgs, th, r){
   setTimeout(sizeBook, 80);
 }
 
+// Normaliza cada página del PDF a un lienzo del mismo tamaño que la portada, sin estirar nada:
+// - página doble (pliego, ~2x de ancho que la portada): se divide en izquierda y derecha
+// - página de otro tamaño: se ajusta completa y centrada (con fondo blanco), nunca se deforma
+async function renderPages(page, a0, W, H){
+  const v0 = page.getViewport({ scale: 1 });
+  const rr = (v0.width / v0.height) / a0;
+  const spread = rr > 1.6 && rr < 2.5;
+  const sc = spread ? H / v0.height : Math.min(W / v0.width, H / v0.height);
+  const vp = page.getViewport({ scale: sc });
+  const src = document.createElement('canvas');
+  src.width = Math.round(vp.width); src.height = Math.round(vp.height);
+  await page.render({ canvasContext: src.getContext('2d'), viewport: vp }).promise;
+  const parts = spread ? [[0, src.width / 2], [src.width / 2, src.width / 2]] : [[0, src.width]];
+  return parts.map(([sx, sw]) => {
+    const c = document.createElement('canvas'); c.width = W; c.height = H;
+    const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, W, H);
+    const k = Math.min(W / sw, H / src.height), dw = sw * k, dh = src.height * k;
+    x.drawImage(src, sx, 0, sw, src.height, (W - dw) / 2, (H - dh) / 2, dw, dh);
+    return c;
+  });
+}
+async function convertPdf(pdf){
+  const n = Math.min(pdf.numPages, 300);
+  const first = await pdf.getPage(1), f0 = first.getViewport({ scale: 1 });
+  const a0 = f0.width / f0.height, W = 1100, H = Math.round(W / a0);
+  const imgs = [], th = [], lt = $('#ltxt');
+  for (let i = 1; i <= n; i++){
+    const page = i === 1 ? first : await pdf.getPage(i);
+    for (const c of await renderPages(page, a0, W, H)){ imgs.push(c.toDataURL('image/jpeg', 0.86)); th.push(thumb(c)); }
+    setProg(i / n); if (lt) lt.textContent = 'Cargando… ' + Math.round(i / n * 100) + '%';
+  }
+  build(imgs, th, H / W);
+}
+
 async function loadPDF(){
   document.title = TITLE; $('#title').textContent = TITLE;
   setProg(0.02);
   try {
     if (!window.pdfjsLib) throw new Error('pdf.js no cargó');
     const pdf = await pdfjsLib.getDocument({ url: PDF_URL }).promise;
-    const n = Math.min(pdf.numPages, 300);
-    const imgs = [], th = []; let r = 1.414;
-    for (let i = 1; i <= n; i++){
-      const page = await pdf.getPage(i);
-      const v0 = page.getViewport({ scale: 1 });
-      if (i === 1) r = v0.height / v0.width;
-      const vp = page.getViewport({ scale: 1100 / v0.width });
-      const c = document.createElement('canvas'); c.width = vp.width; c.height = vp.height;
-      await page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
-      imgs.push(c.toDataURL('image/jpeg', 0.86)); th.push(thumb(c));
-      setProg(i / n); $('#ltxt').textContent = 'Cargando… ' + Math.round(i / n * 100) + '%';
-    }
-    build(imgs, th, r);
+    await convertPdf(pdf);
   } catch (err){
     console.error(err); setProg(1);
-    $('#ltxt').textContent = 'Unable to load document.';
+    $('#ltxt').textContent = 'No se pudo cargar el documento.';
   }
 }
 
