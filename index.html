@@ -1,38 +1,71 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>Revista</title>
+<title>Archive</title>
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
-  --bg:#e9e7e2;--g1:rgba(120,160,255,.30);--g2:rgba(255,176,120,.28);--fg:#1d1d1b;--mut:#6d6a63;--line:rgba(0,0,0,.10);
-  --glass:rgba(255,255,255,.52);--glassb:rgba(255,255,255,.7);--glassx:rgba(246,244,240,.8);--sh:0 10px 40px rgba(30,30,30,.15);
-  --hov:rgba(0,0,0,.07);--acc:#1d1d1b;--accfg:#fff;--act:#0a8fb8;color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121216;--g1:rgba(90,110,255,.24);--g2:rgba(255,140,90,.15);--fg:#f1efe9;--mut:#9a98a0;--line:rgba(255,255,255,.10);--glass:rgba(38,38,48,.5);--glassb:rgba(255,255,255,.14);--glassx:rgba(24,24,30,.8);--sh:0 10px 40px rgba(0,0,0,.45);--hov:rgba(255,255,255,.09);--acc:#f1efe9;--accfg:#16161a;--act:#4cc3e8;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#121216;--g1:rgba(90,110,255,.24);--g2:rgba(255,140,90,.15);--fg:#f1efe9;--mut:#9a98a0;--line:rgba(255,255,255,.10);--glass:rgba(38,38,48,.5);--glassb:rgba(255,255,255,.14);--glassx:rgba(24,24,30,.8);--sh:0 10px 40px rgba(0,0,0,.45);--hov:rgba(255,255,255,.09);--acc:#f1efe9;--accfg:#16161a;--act:#4cc3e8;color-scheme:dark}
-html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+  --bg:#e6eef0;--a1:rgba(45,212,191,.36);--a2:rgba(86,140,255,.30);--a3:rgba(120,230,170,.28);--a4:rgba(150,130,255,.16);
+  --fg:#16201f;--mut:#5f6e6c;--line:rgba(0,40,40,.12);--glass:rgba(255,255,255,.5);--glassb:rgba(255,255,255,.72);--glassx:rgba(240,248,248,.78);
+  --sh:0 10px 40px rgba(10,50,60,.16);--hov:rgba(0,60,60,.08);--act:#0b8c88;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#060c15;--a1:rgba(20,184,166,.32);--a2:rgba(59,130,246,.32);--a3:rgba(52,211,153,.22);--a4:rgba(139,92,246,.20);--fg:#e8f1f0;--mut:#8fa3a1;--line:rgba(255,255,255,.12);--glass:rgba(16,28,40,.5);--glassb:rgba(255,255,255,.14);--glassx:rgba(8,16,26,.78);--sh:0 10px 40px rgba(0,0,0,.5);--hov:rgba(255,255,255,.09);--act:#4de0cf;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#060c15;--a1:rgba(20,184,166,.32);--a2:rgba(59,130,246,.32);--a3:rgba(52,211,153,.22);--a4:rgba(139,92,246,.20);--fg:#e8f1f0;--mut:#8fa3a1;--line:rgba(255,255,255,.12);--glass:rgba(16,28,40,.5);--glassb:rgba(255,255,255,.14);--glassx:rgba(8,16,26,.78);--sh:0 10px 40px rgba(0,0,0,.5);--hov:rgba(255,255,255,.09);--act:#4de0cf;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%;background:var(--bg)}
 *,*::before,*::after{box-sizing:inherit;font-family:'Century Gothic',CenturyGothic,'URW Gothic',sans-serif}
 [hidden]{display:none!important}
-body{margin:0;height:100%;color:var(--fg);display:flex;flex-direction:column;background:radial-gradient(1000px 640px at 10% 6%,var(--g1),transparent 62%),radial-gradient(900px 640px at 94% 94%,var(--g2),transparent 62%),var(--bg);background-attachment:fixed}
-header,#bar,.btn{background:var(--glass);border:1px solid var(--glassb);-webkit-backdrop-filter:blur(22px) saturate(1.6);backdrop-filter:blur(22px) saturate(1.6)}
-header{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;padding:12px 20px;border-width:0 0 1px}
-h1{grid-column:2;margin:0;text-align:center;font-size:14px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60vw}
-.acts{grid-column:3;justify-self:end;display:flex;gap:8px}
-.btn{font-size:13px;color:var(--fg);border-radius:999px;padding:8px 18px;cursor:pointer}
-.btn:hover{background:var(--hov)}
-.pri{background:var(--acc);color:var(--accfg);border-color:var(--acc)}
-@media (max-width:560px){header{grid-template-columns:1fr}h1{grid-column:1;max-width:100%}.acts{grid-column:1;justify-self:center}}
+body{margin:0;height:100%;color:var(--fg);display:flex;flex-direction:column}
+body::before{content:"";position:fixed;inset:-15%;z-index:-1;pointer-events:none;filter:blur(26px);animation:aurora 38s ease-in-out infinite alternate;
+  background:radial-gradient(38% 34% at 18% 22%,var(--a1),transparent 70%),radial-gradient(34% 38% at 82% 18%,var(--a2),transparent 70%),radial-gradient(40% 36% at 70% 84%,var(--a3),transparent 70%),radial-gradient(30% 30% at 25% 85%,var(--a4),transparent 70%)}
+@keyframes aurora{0%{transform:translate3d(-2%,-1%,0) scale(1) rotate(0)}50%{transform:translate3d(2%,2%,0) scale(1.08) rotate(3deg)}100%{transform:translate3d(-1%,3%,0) scale(1.04) rotate(-3deg)}}
+@media (prefers-reduced-motion:reduce){body::before,.g1,.g2{animation:none}}
+header,#bar{background:var(--glass);border:1px solid var(--glassb);-webkit-backdrop-filter:blur(22px) saturate(1.6);backdrop-filter:blur(22px) saturate(1.6)}
+header{padding:13px 20px;border-width:0 0 1px;text-align:center}
+h1{margin:0;font-size:14px;font-weight:400;letter-spacing:.1em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:560px){h1{white-space:normal;font-size:12px;line-height:1.5}}
 #stage{flex:1;min-height:0;position:relative;overflow:hidden}
 #scroll{position:absolute;inset:0;overflow:auto;display:flex}
 #zoomer{flex:none;margin:auto;width:100%;height:100%;padding:20px 20px 88px}
 #book{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
-#prog{position:absolute;left:0;top:0;height:2px;background:var(--act);width:0;transition:width .15s;z-index:6}
-#empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:24px;border:1px dashed var(--line);border-radius:22px;margin:20px}
-#empty{border:0;margin:0;border-radius:0;background:var(--glassx);-webkit-backdrop-filter:blur(26px);backdrop-filter:blur(26px);z-index:7}
-#empty strong{font-weight:400;font-size:16px;letter-spacing:.08em}
-#empty p{color:var(--mut);margin:0;font-size:14px;max-width:420px}
+#prog{position:absolute;left:0;top:0;height:2px;background:var(--act);width:0;transition:width .15s;z-index:8}
+
+/* ---- libro ---- */
+#bk{position:relative;flex:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .9s cubic-bezier(.5,.05,.25,1)}
+#bk.noanim,#bk.noanim *{transition:none!important}
+#bsh{position:absolute;top:0;left:0;height:100%;width:50%;box-shadow:0 26px 60px rgba(0,0,0,.28),0 4px 16px rgba(0,0,0,.16);transition:left .9s cubic-bezier(.5,.05,.25,1),width .9s cubic-bezier(.5,.05,.25,1)}
+.sheet{position:absolute;top:0;left:50%;width:50%;height:100%;transform-origin:left center;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.5,.05,.25,1)}
+.sheet.flipped{transform:rotateY(-180deg)}
+.face{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;background:#fff;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.back{transform:rotateY(180deg)}
+.face img,.pg img{width:100%;height:100%;display:block;pointer-events:none;user-select:none;-webkit-user-drag:none}
+.sh{position:absolute;inset:0;pointer-events:none}
+.front .sh{opacity:0;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.45));transition:opacity .45s ease-out .45s}
+.sheet.flipped .front .sh{opacity:1;transition:opacity .45s ease-in}
+.back .sh{opacity:1;background:linear-gradient(270deg,rgba(0,0,0,0),rgba(0,0,0,.45));transition:opacity .45s ease-in}
+.sheet.flipped .back .sh{opacity:0;transition:opacity .45s ease-out .45s}
+.pg{position:absolute;inset:0;opacity:0;transform:translateX(36px);transition:opacity .4s ease,transform .45s ease;background:#fff}
+.pg.past{transform:translateX(-36px)}
+.pg.on{opacity:1;transform:none}
+
+/* ---- loader ---- */
+#loader{position:absolute;inset:0;z-index:7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;background:var(--glassx);-webkit-backdrop-filter:blur(26px);backdrop-filter:blur(26px)}
+.spin,.erri{width:52px;height:52px;margin-bottom:6px}
+.spin circle{fill:none;stroke-width:1.1;stroke-linecap:round}
+.spin .trk{stroke:var(--line)}
+.spin .arc{stroke:var(--act);stroke-dasharray:36 90}
+.spin .arc2{stroke:var(--act);stroke-dasharray:14 68;opacity:.6}
+.g1,.g2{transform-origin:25px 25px}
+.g1{animation:rot 1.5s linear infinite}
+.g2{animation:rot 2.4s linear infinite reverse}
+@keyframes rot{to{transform:rotate(360deg)}}
+.erri{fill:none;stroke:var(--mut);stroke-width:1.1;stroke-linecap:round;display:none}
+#loader.err .spin{display:none}
+#loader.err .erri{display:block}
+#ltxt{font-size:15px;letter-spacing:.1em}
+#lsub{font-size:13px;color:var(--mut);margin:0;letter-spacing:.04em}
+
+/* ---- barra ---- */
 #bar{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:2px;padding:6px 12px;border-radius:999px;box-shadow:var(--sh),inset 0 1px 0 var(--glassb);max-width:calc(100% - 16px);overflow-x:auto}
 .ib{flex:none;width:38px;height:38px;border-radius:50%;border:0;background:transparent;color:var(--fg);display:grid;place-items:center;padding:0;cursor:pointer;transition:background .15s}
 .ib:hover:not(:disabled){background:var(--hov)}
@@ -41,7 +74,7 @@ h1{grid-column:2;margin:0;text-align:center;font-size:14px;font-weight:400;lette
 .ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .sep{flex:none;width:1px;height:22px;background:var(--line);margin:0 6px}
 #pgw{flex:none;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mut);padding:0 6px}
-#pg{width:44px;height:30px;text-align:center;font-size:13px;color:var(--fg);background:var(--hov);border:1px solid transparent;border-radius:999px;outline:0}
+#pg{width:64px;height:30px;text-align:center;font-size:13px;color:var(--fg);background:var(--hov);border:1px solid transparent;border-radius:999px;outline:0}
 #pg:focus{border-color:var(--act)}
 #thumbs{position:absolute;inset:0;z-index:4;background:var(--glassx);-webkit-backdrop-filter:blur(26px) saturate(1.5);backdrop-filter:blur(26px) saturate(1.5);overflow:auto;padding:24px 24px 96px}
 #tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:18px}
@@ -49,98 +82,163 @@ h1{grid-column:2;margin:0;text-align:center;font-size:14px;font-weight:400;lette
 .th img{width:100%;display:block;border-radius:6px;box-shadow:0 4px 14px rgba(0,0,0,.22);border:2px solid transparent}
 .th.cur img,.th:hover img{border-color:var(--act)}
 .th span{display:block;margin-top:6px}
-input[type=file]{display:none}
 </style>
 </head>
 <body>
-<header>
-  <h1 id="title"></h1>
-</header>
+<header><h1 id="title"></h1></header>
 <main id="stage">
   <div id="prog"></div>
-  <div id="scroll"><div id="zoomer"><div id="book"></div></div></div>
+  <div id="scroll"><div id="zoomer"><div id="book"><div id="bk"><div id="bsh"></div></div></div></div></div>
   <div id="thumbs" hidden><div id="tgrid"></div></div>
-  <div id="empty">
-    <strong id="ltxt">Cargando…</strong>
-    <p>Preparando el documento, puede tardar unos segundos.</p>
+  <div id="loader">
+    <svg class="spin" viewBox="0 0 50 50" aria-hidden="true">
+      <circle class="trk" cx="25" cy="25" r="20"/>
+      <g class="g1"><circle class="arc" cx="25" cy="25" r="20"/></g>
+      <g class="g2"><circle class="arc2" cx="25" cy="25" r="13"/></g>
+    </svg>
+    <svg class="erri" viewBox="0 0 50 50" aria-hidden="true"><circle cx="25" cy="25" r="20"/><path d="M25 15v13M25 34v1.5"/></svg>
+    <div id="ltxt">Loading document</div>
+    <p id="lsub">This may take a few seconds…</p>
   </div>
   <nav id="bar" hidden>
-    <button class="ib" id="prev" title="Página anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-    <div id="pgw"><input id="pg" type="text" inputmode="numeric" aria-label="Ir a la página"><span id="tot">/ 1</span></div>
-    <button class="ib" id="next" title="Página siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    <button class="ib" id="prev" title="Previous page"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div id="pgw"><input id="pg" type="text" inputmode="numeric" aria-label="Go to page"><span id="tot">/ 1</span></div>
+    <button class="ib" id="next" title="Next page"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
     <span class="sep"></span>
-    <button class="ib" id="tb" title="Miniaturas"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1"/></svg></button>
-    <button class="ib" id="zin" title="Acercar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M8.5 11h5M11 8.5v5"/></svg></button>
-    <button class="ib" id="zout" title="Alejar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M8.5 11h5"/></svg></button>
-    <button class="ib act" id="fit" title="Ajustar a pantalla"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg></button>
-    <button class="ib" id="fs" title="Pantalla completa"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button>
+    <button class="ib" id="tb" title="Thumbnails"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1"/></svg></button>
+    <button class="ib" id="zin" title="Zoom in"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M8.5 11h5M11 8.5v5"/></svg></button>
+    <button class="ib" id="zout" title="Zoom out"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M8.5 11h5"/></svg></button>
+    <button class="ib act" id="fit" title="Fit to screen"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg></button>
+    <button class="ib" id="fs" title="Full screen"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button>
   </nav>
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
 <script>
-// ====== CONFIGURACIÓN ======
-const PDF_URL = 'documento.pdf';          // el PDF que va en la misma carpeta que este index.html
-const TITLE   = 'Nombre del documento';   // título que se muestra arriba
-// ===========================
+// ====== CONFIG ======
+const PDF_URL = 'documento.pdf';   // the PDF that sits next to this index.html
+const TITLE   = 'DAZ | Arquitectura + Construcción / PROJECTS_ARCHIVE';
+// ====================
 const $ = s => document.querySelector(s);
-let flip = null, total = 0, orig = 0, padIdx = -1, ratio = 1.414, zoom = 1, thumbs = [], busy = false;
+const FT = 900; // flip duration (ms), keep in sync with the CSS (.9s)
+let pages = [], thumbs = [], total = 0, orig = 0, padIdx = -1, ratio = 1.414;
+let mode = null, cur = 0, nSh = 0, pw = 0, ph = 0, anim = false, ready = false, zoom = 1, sheets = [], slides = [];
+const bk = $('#bk'), bsh = $('#bsh');
 const ctrls = ['prev','next','pg','tb','zin','zout','fit','fs'].map(i => $('#' + i));
 if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 function setProg(p){ $('#prog').style.width = (p * 100) + '%'; if (p >= 1) setTimeout(() => $('#prog').style.width = '0', 300); }
-
-// Número de página mostrado (la página en blanco de relleno no cuenta)
-function num(i){ return (padIdx < 0 || i < padIdx) ? i + 1 : (i === padIdx ? padIdx : i); }
+function num(i){ return (padIdx < 0 || i < padIdx) ? i + 1 : (i === padIdx ? padIdx : i); } // the filler page has no number
 function idxOf(v){ return (padIdx < 0 || v <= padIdx) ? v - 1 : v; }
-
-// Portada y contraportada se ven solas: se centran en pantalla
-function shiftBook(kind, clip = true){
-  const el = $('#book').firstChild; if (!el) return;
-  const w = el.offsetWidth, land = w >= 520;
-  const x = land ? (kind === 'cover' ? -w / 4 : kind === 'back' ? w / 4 : 0) : 0;
-  el.style.transform = 'translateX(' + x + 'px)';
-  // Recorta la mitad vacía que la librería dibuja junto a la portada / contraportada, para que quede una sola página
-  el.style.clipPath = !(clip && land) ? 'none' : kind === 'cover' ? 'inset(0 0 0 50%)' : kind === 'back' ? 'inset(0 50% 0 0)' : 'none';
+function lastIdx(){ return padIdx === total - 1 ? total - 2 : total - 1; }
+function visible(){
+  if (mode === 'single') return [cur];
+  if (cur === 0) return [0];
+  if (cur === nSh) return [total - 1];
+  return [2 * cur - 1, 2 * cur];
 }
-function center(i){
-  if (!flip) return;
-  shiftBook(i <= 0 ? 'cover' : (i >= total - 1 && total % 2 === 0 ? 'back' : 'mid'));
-}
-// Al volver a la portada o ir a la contraportada, el libro se centra al mismo tiempo que gira la hoja
-function go(dir){
-  if (!flip) return;
-  const i = flip.getCurrentPageIndex();
-  if (dir > 0 && total % 2 === 0 && i >= total - 3 && i < total - 1) shiftBook('back', false);
-  if (dir < 0 && i > 0 && i <= 2) shiftBook('cover', false);
-  dir > 0 ? flip.flipNext() : flip.flipPrev();
+function updUI(){
+  const v = visible();
+  $('#pg').value = v.filter(i => i !== padIdx).map(num).join('–');
+  $('#tot').textContent = '/ ' + orig;
+  $('#prev').disabled = cur <= 0;
+  $('#next').disabled = mode === 'single' ? cur >= lastIdx() : cur >= nSh;
+  document.querySelectorAll('.th').forEach(t => t.classList.toggle('cur', v.includes(+t.dataset.i)));
 }
 
-function sizeBook(){
-  const h = $('#book'), el = h.firstChild; if (!el) return;
-  const aw = h.clientWidth, ah = h.clientHeight;
-  let w = Math.min(aw, ah * 2 / ratio);
-  if (w < 520) w = Math.min(aw, ah / ratio, 519);
-  el.style.width = Math.max(120, Math.floor(w)) + 'px';
-  if (flip){
-    busy = true;
-    try { flip.update(); } catch(e){}
-    window.dispatchEvent(new Event('resize'));
-    busy = false;
-    setTimeout(() => flip && center(flip.getCurrentPageIndex()), 60);
+// Cover and back cover are centered; the spread shadow follows what is visible
+function shift(){
+  let x = 0, l = 0, w = pw;
+  if (mode === 'spread'){
+    if (cur === 0){ x = -pw / 2; l = pw; }
+    else if (cur === nSh){ x = pw / 2; }
+    else w = 2 * pw;
+  }
+  bk.style.transform = 'translateX(' + x + 'px)';
+  bsh.style.left = l + 'px'; bsh.style.width = w + 'px';
+}
+function clearBk(){ [...bk.children].forEach(c => { if (c !== bsh) c.remove(); }); }
+function mkImg(src){ const im = new Image(); im.alt = ''; im.draggable = false; im.src = src; return im; }
+
+function buildSpread(){
+  sheets = [];
+  for (let k = 0; k < nSh; k++){
+    const s = document.createElement('div'); s.className = 'sheet';
+    const f = document.createElement('div'); f.className = 'face front'; f.append(mkImg(pages[2 * k]), document.createElement('i')); f.lastChild.className = 'sh';
+    const b = document.createElement('div'); b.className = 'face back'; b.append(mkImg(pages[2 * k + 1]), document.createElement('i')); b.lastChild.className = 'sh';
+    s.append(f, b); bk.appendChild(s); sheets.push(s);
   }
 }
-
-function updInfo(i){
-  $('#pg').value = num(i);
-  $('#tot').textContent = '/ ' + orig;
-  $('#prev').disabled = i <= 0;
-  $('#next').disabled = i >= total - 1;
-  document.querySelectorAll('.th').forEach(t => t.classList.toggle('cur', +t.dataset.i === i));
-  center(i);
+function place(){
+  sheets.forEach((s, k) => {
+    const fl = k < cur;
+    s.classList.toggle('flipped', fl);
+    s.style.zIndex = fl ? k + 1 : nSh - k;
+    s.style.display = (fl ? k >= cur - 3 : k < cur + 3) ? '' : 'none';
+  });
 }
+function buildSingle(){
+  slides = pages.map(src => { const d = document.createElement('div'); d.className = 'pg'; d.appendChild(mkImg(src)); bk.appendChild(d); return d; });
+}
+function placeSingle(){
+  slides.forEach((d, i) => { d.classList.toggle('on', i === cur); d.classList.toggle('past', i < cur); d.style.display = Math.abs(i - cur) <= 2 ? '' : 'none'; });
+}
+function switchMode(nm){
+  const p = mode === null ? 0 : (mode === 'spread' ? (cur === 0 ? 0 : cur === nSh ? total - 1 : 2 * cur - 1) : cur);
+  mode = nm; clearBk(); bk.classList.add('noanim');
+  if (mode === 'spread'){ nSh = total / 2; buildSpread(); cur = p <= 0 ? 0 : Math.min(nSh, Math.ceil(p / 2)); place(); }
+  else { buildSingle(); cur = p === padIdx ? Math.max(0, p - 1) : p; placeSingle(); }
+  void bk.offsetWidth; requestAnimationFrame(() => bk.classList.remove('noanim'));
+}
+function sizeBook(){
+  if (!ready) return;
+  const h = $('#book'), aw = h.clientWidth, ah = h.clientHeight;
+  const nm = aw < 600 ? 'single' : 'spread';
+  if (nm !== mode) switchMode(nm);
+  const cw = mode === 'spread' ? 2 : 1;
+  pw = Math.max(60, Math.floor(Math.min(aw / cw, ah / ratio)));
+  ph = Math.round(pw * ratio);
+  bk.style.width = cw * pw + 'px'; bk.style.height = ph + 'px'; bk.style.perspective = (pw * 4) + 'px';
+  shift(); updUI();
+}
+
+function go(dir){
+  if (!ready || anim) return;
+  if (mode === 'single'){
+    let t = cur + dir; if (t === padIdx) t += dir;
+    if (t < 0 || t > lastIdx()) return;
+    cur = t; placeSingle(); updUI(); return;
+  }
+  const t = cur + dir; if (t < 0 || t > nSh) return;
+  const s = sheets[dir > 0 ? cur : cur - 1];
+  for (let j = Math.max(0, cur - 4); j <= Math.min(nSh - 1, cur + 4); j++) sheets[j].style.display = '';
+  s.style.zIndex = 1000; cur = t; s.classList.toggle('flipped', dir > 0);
+  shift(); updUI(); anim = true;
+  setTimeout(() => { anim = false; place(); }, FT + 40);
+}
+function jump(c){
+  if (c === cur) return;
+  bk.classList.add('noanim'); cur = Math.max(0, Math.min(nSh, c)); place(); shift(); updUI();
+  void bk.offsetWidth; requestAnimationFrame(() => bk.classList.remove('noanim'));
+}
+function goToPage(i){
+  closeThumbs();
+  if (mode === 'single'){ cur = i === padIdx ? Math.max(0, i - 1) : i; placeSingle(); updUI(); return; }
+  const c = i <= 0 ? 0 : Math.min(nSh, Math.ceil(i / 2));
+  Math.abs(c - cur) === 1 ? go(c - cur) : jump(c);
+}
+
+function buildThumbs(){
+  const g = $('#tgrid'); g.innerHTML = '';
+  thumbs.forEach((src, i) => {
+    const d = document.createElement('div'); d.className = 'th'; d.dataset.i = i;
+    const im = new Image(); im.src = src; im.alt = '';
+    const s = document.createElement('span'); s.textContent = i === padIdx ? '' : num(i);
+    d.append(im, s); d.onclick = () => goToPage(i); g.appendChild(d);
+  });
+}
+function closeThumbs(){ $('#thumbs').hidden = true; $('#tb').classList.remove('act'); }
 
 function blank(w, h){
   const c = document.createElement('canvas'); c.width = w; c.height = h;
@@ -153,68 +251,31 @@ function thumb(c){
   return t.toDataURL('image/jpeg', 0.6);
 }
 
-function buildThumbs(){
-  const g = $('#tgrid'); g.innerHTML = '';
-  thumbs.forEach((src, i) => {
-    const d = document.createElement('div'); d.className = 'th'; d.dataset.i = i;
-    const im = new Image(); im.src = src; im.alt = '';
-    const s = document.createElement('span'); s.textContent = i === padIdx ? '' : num(i);
-    d.append(im, s);
-    d.onclick = () => { closeThumbs(); goTo(i); };
-    g.appendChild(d);
-  });
-}
-function closeThumbs(){ $('#thumbs').hidden = true; $('#tb').classList.remove('act'); }
-function goTo(i){ if (!flip) return; flip.turnToPage(i); setTimeout(() => updInfo(flip.getCurrentPageIndex()), 80); }
-
 function build(imgs, th, r){
-  if (flip){ try { flip.destroy(); } catch(e){} flip = null; }
   ratio = r; orig = imgs.length; padIdx = -1; imgs = imgs.slice(); th = th.slice();
-  // Si el total es impar, se agrega una hoja en blanco antes de la contraportada para que quede sola, como en una revista
-  if (orig >= 3 && orig % 2 === 1){
-    const b = blank(400, Math.round(400 * r)); padIdx = orig - 1;
+  // Odd page count: add a blank sheet before the back cover so it stays alone, like a printed magazine
+  if (orig % 2 === 1){
+    const b = blank(400, Math.round(400 * r)); padIdx = orig >= 3 ? orig - 1 : 1;
     imgs.splice(padIdx, 0, b); th.splice(padIdx, 0, b);
   }
-  total = imgs.length; thumbs = th;
-  const host = $('#book'); host.innerHTML = '';
-  const el = document.createElement('div'); host.appendChild(el);
-  $('#empty').style.display = 'none'; $('#bar').hidden = false; closeThumbs();
+  pages = imgs; thumbs = th; total = pages.length; mode = null; cur = 0; anim = false;
+  clearBk(); buildThumbs();
+  $('#loader').hidden = true; $('#bar').hidden = false; closeThumbs();
   ctrls.forEach(b => b.disabled = false);
   zoom = 1; const zm = $('#zoomer'); zm.style.width = zm.style.height = '100%';
-  sizeBook();
-  flip = new St.PageFlip(el, {
-    width: 500, height: Math.round(500 * r), size: 'stretch',
-    minWidth: 260, maxWidth: 2400, minHeight: 320, maxHeight: 3600,
-    showCover: true, usePortrait: true, mobileScrollSupport: false,
-    maxShadowOpacity: 0.45, flippingTime: 800, startPage: 0
-  });
-  flip.loadFromImages(imgs);
-  el.style.transition = 'transform .45s ease';
-  flip.on('flip', e => updInfo(e.data));
-  flip.on('changeOrientation', () => updInfo(flip.getCurrentPageIndex()));
-  flip.on('changeState', e => {
-    const i = flip.getCurrentPageIndex();
-    if (e.data === 'read') center(i);
-    else if (e.data === 'user_fold' || e.data === 'flipping'){
-      if (e.data === 'flipping' && (i === 0 || (i >= total - 1 && total % 2 === 0))) shiftBook('mid');
-      else el.style.clipPath = 'none';
-    }
-  });
-  buildThumbs(); setZoomUI(); updInfo(0);
-  setTimeout(sizeBook, 80);
+  ready = true; sizeBook(); setZoomUI();
 }
 
-// Normaliza cada página del PDF a un lienzo del mismo tamaño que la portada, sin estirar nada:
-// - página doble (pliego, ~2x de ancho que la portada): se divide en izquierda y derecha
-// - página de otro tamaño: se ajusta completa y centrada (con fondo blanco), nunca se deforma
+// Each PDF page is normalized to a canvas with the cover's proportions, never stretched:
+// - double page (about 2x the cover's width): split into left and right pages
+// - any other size: fitted whole and centered on white
 async function renderPages(page, a0, W, H){
   const v0 = page.getViewport({ scale: 1 });
   const rr = (v0.width / v0.height) / a0;
   const spread = rr > 1.6 && rr < 2.5;
   const sc = spread ? H / v0.height : Math.min(W / v0.width, H / v0.height);
   const vp = page.getViewport({ scale: sc });
-  const src = document.createElement('canvas');
-  src.width = Math.round(vp.width); src.height = Math.round(vp.height);
+  const src = document.createElement('canvas'); src.width = Math.round(vp.width); src.height = Math.round(vp.height);
   await page.render({ canvasContext: src.getContext('2d'), viewport: vp }).promise;
   const parts = spread ? [[0, src.width / 2], [src.width / 2, src.width / 2]] : [[0, src.width]];
   return parts.map(([sx, sw]) => {
@@ -228,35 +289,34 @@ async function renderPages(page, a0, W, H){
 async function convertPdf(pdf){
   const n = Math.min(pdf.numPages, 300);
   const first = await pdf.getPage(1), f0 = first.getViewport({ scale: 1 });
-  const a0 = f0.width / f0.height, W = 1100, H = Math.round(W / a0);
-  const imgs = [], th = [], lt = $('#ltxt');
+  const a0 = f0.width / f0.height, W = 1400, H = Math.round(W / a0);
+  const imgs = [], th = [];
   for (let i = 1; i <= n; i++){
     const page = i === 1 ? first : await pdf.getPage(i);
-    for (const c of await renderPages(page, a0, W, H)){ imgs.push(c.toDataURL('image/jpeg', 0.86)); th.push(thumb(c)); }
-    setProg(i / n); if (lt) lt.textContent = 'Cargando… ' + Math.round(i / n * 100) + '%';
+    for (const c of await renderPages(page, a0, W, H)){ imgs.push(c.toDataURL('image/jpeg', 0.85)); th.push(thumb(c)); }
+    setProg(i / n); $('#ltxt').textContent = 'Loading document · ' + Math.round(i / n * 100) + '%';
   }
   build(imgs, th, H / W);
 }
 
+function showError(){
+  $('#loader').classList.add('err');
+  $('#ltxt').textContent = 'Unable to load document.';
+  $('#lsub').textContent = 'Please check the file and try again.';
+}
 async function loadPDF(){
   document.title = TITLE; $('#title').textContent = TITLE;
   setProg(0.02);
   try {
-    if (!window.pdfjsLib) throw new Error('pdf.js no cargó');
+    if (!window.pdfjsLib) throw new Error('pdf.js unavailable');
     const pdf = await pdfjsLib.getDocument({ url: PDF_URL }).promise;
     await convertPdf(pdf);
-  } catch (err){
-    console.error(err); setProg(1);
-    $('#ltxt').textContent = 'No se pudo cargar el documento.';
-  }
+  } catch (err){ console.error(err); setProg(1); showError(); }
 }
 
-function setZoomUI(){
-  $('#zin').disabled = zoom >= 3; $('#zout').disabled = zoom <= 1;
-  $('#fit').classList.toggle('act', zoom === 1);
-}
+function setZoomUI(){ $('#zin').disabled = zoom >= 3; $('#zout').disabled = zoom <= 1; $('#fit').classList.toggle('act', zoom === 1); }
 function setZoom(z){
-  if (!flip) return;
+  if (!ready) return;
   zoom = Math.max(1, Math.min(3, z));
   const zm = $('#zoomer'); zm.style.width = zm.style.height = (zoom * 100) + '%';
   sizeBook();
@@ -275,17 +335,27 @@ $('#fs').onclick = () => { const s = $('#stage'); document.fullscreenElement ? d
 $('#pg').addEventListener('keydown', e => {
   if (e.key !== 'Enter') return;
   const v = Math.max(1, Math.min(orig, parseInt(e.target.value, 10) || 1));
-  goTo(idxOf(v)); e.target.blur();
+  goToPage(idxOf(v)); e.target.blur();
 });
 $('#pg').addEventListener('focus', e => e.target.select());
+// click / tap: right half = next, left half = previous; swipe also works
+let px = 0, py = 0;
+bk.addEventListener('pointerdown', e => { px = e.clientX; py = e.clientY; });
+bk.addEventListener('pointerup', e => {
+  const dx = e.clientX - px, dy = e.clientY - py;
+  if (Math.abs(dx) > 45 && Math.abs(dy) < 90){ go(dx < 0 ? 1 : -1); return; }
+  if (Math.abs(dx) < 10 && Math.abs(dy) < 10){
+    const r = bk.getBoundingClientRect(), f = (e.clientX - r.left) / r.width;
+    go(f > (mode === 'single' ? 0.4 : 0.5) ? 1 : -1);
+  }
+});
 document.addEventListener('keydown', e => {
-  if (!flip || e.target.tagName === 'INPUT') return;
+  if (!ready || e.target.tagName === 'INPUT') return;
   if (e.key === 'ArrowRight') go(1);
   if (e.key === 'ArrowLeft') go(-1);
   if (e.key === 'Escape') closeThumbs();
 });
-window.addEventListener('resize', () => { if (!busy) sizeBook(); });
-
+window.addEventListener('resize', sizeBook);
 loadPDF();
 </script>
 </body>
