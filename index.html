@@ -19,7 +19,7 @@ body{margin:0;height:100%;color:var(--fg);display:flex;flex-direction:column}
 body::before{content:"";position:fixed;inset:-15%;z-index:-1;pointer-events:none;filter:blur(26px);animation:aurora 38s ease-in-out infinite alternate;
   background:radial-gradient(38% 34% at 18% 22%,var(--a1),transparent 70%),radial-gradient(34% 38% at 82% 18%,var(--a2),transparent 70%),radial-gradient(40% 36% at 70% 84%,var(--a3),transparent 70%),radial-gradient(30% 30% at 25% 85%,var(--a4),transparent 70%)}
 @keyframes aurora{0%{transform:translate3d(-2%,-1%,0) scale(1) rotate(0)}50%{transform:translate3d(2%,2%,0) scale(1.08) rotate(3deg)}100%{transform:translate3d(-1%,3%,0) scale(1.04) rotate(-3deg)}}
-@media (prefers-reduced-motion:reduce){body::before,.g1,.g2{animation:none}}
+@media (prefers-reduced-motion:reduce){body::before,.g1,.g2,.idle .arw{animation:none!important}}
 header,#bar{background:var(--glass);border:1px solid var(--glassb);-webkit-backdrop-filter:blur(22px) saturate(1.6);backdrop-filter:blur(22px) saturate(1.6)}
 header{padding:13px 20px;border-width:0 0 1px;text-align:center}
 h1{margin:0;font-size:14px;font-weight:400;letter-spacing:.1em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -66,7 +66,9 @@ h1{margin:0;font-size:14px;font-weight:400;letter-spacing:.1em;white-space:nowra
 #lsub{font-size:13px;color:var(--mut);margin:0;letter-spacing:.04em}
 
 /* ---- barra ---- */
-#bar{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:2px;padding:6px 12px;border-radius:999px;box-shadow:var(--sh),inset 0 1px 0 var(--glassb);max-width:calc(100% - 16px);overflow-x:auto}
+#bar{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);width:max-content;z-index:5;display:flex;align-items:center;gap:3px;padding:6px 16px;border-radius:999px;box-shadow:var(--sh),inset 0 1px 0 var(--glassb);max-width:calc(100% - 12px);overflow-x:auto;scrollbar-width:none;transition:opacity .8s ease}
+#bar::-webkit-scrollbar{display:none}
+#stage.idle #bar{opacity:.55}
 .ib{flex:none;width:38px;height:38px;border-radius:50%;border:0;background:transparent;color:var(--fg);display:grid;place-items:center;padding:0;cursor:pointer;transition:background .15s}
 .ib:hover:not(:disabled){background:var(--hov)}
 .ib:disabled{opacity:.3;cursor:default}
@@ -76,6 +78,21 @@ h1{margin:0;font-size:14px;font-weight:400;letter-spacing:.1em;white-space:nowra
 #pgw{flex:none;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mut);padding:0 6px}
 #pg{width:64px;height:30px;text-align:center;font-size:13px;color:var(--fg);background:var(--hov);border:1px solid transparent;border-radius:999px;outline:0}
 #pg:focus{border-color:var(--act)}
+.arw{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;padding:0;cursor:pointer;color:var(--fg);background:var(--glass);border:1px solid var(--glassb);-webkit-backdrop-filter:blur(14px) saturate(1.5);backdrop-filter:blur(14px) saturate(1.5);opacity:.8;transition:opacity .6s ease,background .2s}
+#aprev{left:12px}#anext{right:12px}
+.arw svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.arw:hover{opacity:1;background:var(--glassx)}
+.arw:disabled{opacity:0;pointer-events:none;animation:none}
+.idle .arw:not(:disabled){animation:breathe 3.8s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.3}50%{opacity:.85}}
+#thumbs:not([hidden]) ~ .arw{display:none}
+@media (max-width:560px){
+  .arw{width:36px;height:36px}#aprev{left:6px}#anext{right:6px}
+  #bar{gap:0;padding:5px 9px;bottom:14px}
+  .ib{width:34px;height:34px}.ib svg{width:18px;height:18px}
+  #pg{width:56px}#pgw{padding:0 3px;gap:4px}.sep{margin:0 3px}
+  #fs{display:none}
+}
 #thumbs{position:absolute;inset:0;z-index:4;background:var(--glassx);-webkit-backdrop-filter:blur(26px) saturate(1.5);backdrop-filter:blur(26px) saturate(1.5);overflow:auto;padding:24px 24px 96px}
 #tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:18px}
 .th{cursor:pointer;text-align:center;font-size:12px;color:var(--mut)}
@@ -111,6 +128,8 @@ h1{margin:0;font-size:14px;font-weight:400;letter-spacing:.1em;white-space:nowra
     <button class="ib act" id="fit" title="Fit to screen"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg></button>
     <button class="ib" id="fs" title="Full screen"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button>
   </nav>
+  <button class="arw" id="aprev" title="Previous page" hidden><svg viewBox="0 0 24 24"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg></button>
+  <button class="arw" id="anext" title="Next page" hidden><svg viewBox="0 0 24 24"><path d="M9.5 5.5L16 12l-6.5 6.5"/></svg></button>
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -118,7 +137,7 @@ h1{margin:0;font-size:14px;font-weight:400;letter-spacing:.1em;white-space:nowra
 <script>
 // ====== CONFIG ======
 const PDF_URL = 'documento.pdf';   // the PDF that sits next to this index.html
-const TITLE   = 'DAZ | Arquitectura + Construcción / PROJECTS_ARCHIVE';
+const TITLE   = 'DAZ | Arquitectura + Construcción';
 // ====================
 const $ = s => document.querySelector(s);
 const FT = 900; // flip duration (ms), keep in sync with the CSS (.9s)
@@ -144,6 +163,7 @@ function updUI(){
   $('#tot').textContent = '/ ' + orig;
   $('#prev').disabled = cur <= 0;
   $('#next').disabled = mode === 'single' ? cur >= lastIdx() : cur >= nSh;
+  $('#aprev').disabled = $('#prev').disabled; $('#anext').disabled = $('#next').disabled;
   document.querySelectorAll('.th').forEach(t => t.classList.toggle('cur', v.includes(+t.dataset.i)));
 }
 
@@ -260,10 +280,10 @@ function build(imgs, th, r){
   }
   pages = imgs; thumbs = th; total = pages.length; mode = null; cur = 0; anim = false;
   clearBk(); buildThumbs();
-  $('#loader').hidden = true; $('#bar').hidden = false; closeThumbs();
+  $('#loader').hidden = true; $('#bar').hidden = false; $('#aprev').hidden = false; $('#anext').hidden = false; closeThumbs();
   ctrls.forEach(b => b.disabled = false);
   zoom = 1; const zm = $('#zoomer'); zm.style.width = zm.style.height = '100%';
-  ready = true; sizeBook(); setZoomUI();
+  ready = true; sizeBook(); setZoomUI(); wake();
 }
 
 // Each PDF page is normalized to a canvas with the cover's proportions, never stretched:
@@ -327,6 +347,8 @@ function setZoom(z){
 
 $('#prev').onclick = () => go(-1);
 $('#next').onclick = () => go(1);
+$('#aprev').onclick = () => go(-1);
+$('#anext').onclick = () => go(1);
 $('#zin').onclick = () => setZoom(zoom + 0.5);
 $('#zout').onclick = () => setZoom(zoom - 0.5);
 $('#fit').onclick = () => setZoom(1);
@@ -356,6 +378,10 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeThumbs();
 });
 window.addEventListener('resize', sizeBook);
+// idle: the bar dims softly and the side arrows breathe; any interaction brings them back
+let idleT = null;
+function wake(){ $('#stage').classList.remove('idle'); clearTimeout(idleT); idleT = setTimeout(() => $('#stage').classList.add('idle'), 3500); }
+['pointermove','pointerdown','keydown','touchstart','wheel'].forEach(ev => document.addEventListener(ev, wake, { passive: true }));
 loadPDF();
 </script>
 </body>
