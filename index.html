@@ -60,7 +60,10 @@ h1{margin:0;font-size:14px;font-weight:400;letter-spacing:.1em;white-space:nowra
 .sheet.flipped .front .sh{opacity:1;transition:opacity .45s ease-in}
 .back .sh{opacity:1;background:linear-gradient(270deg,rgba(0,0,0,0),rgba(0,0,0,.45));transition:opacity .45s ease-in}
 .sheet.flipped .back .sh{opacity:0;transition:opacity .45s ease-out .45s}
-.pg{position:absolute;inset:0;opacity:0;transform:scale(.985);transition:opacity .4s ease,transform .45s ease;background:#fff}
+.pg{position:absolute;inset:0;opacity:0;transform:scale(.985);transition:opacity .4s ease,transform .45s ease;background:#fff;pointer-events:none}
+.pg.on{pointer-events:auto}
+.lk{position:absolute;display:block;border-radius:6px;cursor:pointer;outline:1px solid transparent;transition:background .2s,outline-color .2s,box-shadow .2s;-webkit-tap-highlight-color:rgba(255,255,255,.3)}
+.lk:hover,.lk:focus-visible{background:rgba(255,255,255,.16);outline-color:rgba(255,255,255,.8);box-shadow:0 0 0 4px rgba(255,255,255,.14)}
 .pg.on{opacity:1;transform:none}
 
 /* ---- loader ---- */
@@ -165,10 +168,14 @@ h1{margin:0;font-size:14px;font-weight:400;letter-spacing:.1em;white-space:nowra
 // ====== CONFIG ======
 const PDF_URL = 'documento.pdf';   // the PDF that sits next to this index.html
 const TITLE   = 'DAZ | Arquitectura + Construcción';
+// Links: the viewer picks up the links that already exist inside the PDF. If a page has none, add them here
+// (page = PDF page number; x, y, w, h = position and size as % of the page):
+// { page: 13, x: 51, y: 81, w: 42, h: 13, url: 'https://your-vr-tour-link' }
+const HOTSPOTS = [];
 // ====================
 const $ = s => document.querySelector(s);
 const FT = 900; // flip duration (ms), keep in sync with the CSS (.9s)
-let pages = [], thumbs = [], total = 0, orig = 0, padIdx = -1, ratio = 1.414;
+let pages = [], plinks = [], thumbs = [], total = 0, orig = 0, padIdx = -1, ratio = 1.414;
 let forced = null, mode = null, cur = 0, nSh = 0, pw = 0, ph = 0, anim = false, ready = false, zoom = 1, sheets = [], slides = [];
 const bk = $('#bk'), bsh = $('#bsh');
 const ctrls = ['prev','next','pg','tb','vm','zin','fit','fs'].map(i => $('#' + i));
@@ -206,15 +213,29 @@ function shift(){
   bsh.style.left = l + 'px'; bsh.style.width = w + 'px';
 }
 function clearBk(){ [...bk.children].forEach(c => { if (c !== bsh) c.remove(); }); }
+function hostOf(u){ try { return new URL(u).hostname; } catch (e){ return u; } }
+function addLinks(host, i){
+  (plinks[i] || []).forEach(l => {
+    if (!/^(https?:|mailto:|tel:)/i.test(l.url)) return;   // only safe link types
+    const a = document.createElement('a');
+    a.className = 'lk'; a.href = l.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.title = 'Open · ' + hostOf(l.url);
+    a.style.cssText = 'left:' + l.x * 100 + '%;top:' + l.y * 100 + '%;width:' + l.w * 100 + '%;height:' + l.h * 100 + '%';
+    host.appendChild(a);
+  });
+}
+function mkFace(cls, i){
+  const f = document.createElement('div'); f.className = 'face ' + cls;
+  f.appendChild(mkImg(pages[i])); addLinks(f, i);
+  const s = document.createElement('i'); s.className = 'sh'; f.appendChild(s);
+  return f;
+}
 function mkImg(src){ const im = new Image(); im.alt = ''; im.draggable = false; im.src = src; return im; }
 
 function buildSpread(){
   sheets = [];
   for (let k = 0; k < nSh; k++){
     const s = document.createElement('div'); s.className = 'sheet';
-    const f = document.createElement('div'); f.className = 'face front'; f.append(mkImg(pages[2 * k]), document.createElement('i')); f.lastChild.className = 'sh';
-    const b = document.createElement('div'); b.className = 'face back'; b.append(mkImg(pages[2 * k + 1]), document.createElement('i')); b.lastChild.className = 'sh';
-    s.append(f, b); bk.appendChild(s); sheets.push(s);
+    s.append(mkFace('front', 2 * k), mkFace('back', 2 * k + 1)); bk.appendChild(s); sheets.push(s);
   }
 }
 function place(){
@@ -226,7 +247,7 @@ function place(){
   });
 }
 function buildSingle(){
-  slides = pages.map(src => { const d = document.createElement('div'); d.className = 'pg'; d.appendChild(mkImg(src)); bk.appendChild(d); return d; });
+  slides = pages.map((src, i) => { const d = document.createElement('div'); d.className = 'pg'; d.appendChild(mkImg(src)); addLinks(d, i); bk.appendChild(d); return d; });
 }
 function placeSingle(){
   slides.forEach((d, i) => { d.classList.toggle('on', i === cur); d.classList.toggle('past', i < cur); d.style.display = Math.abs(i - cur) <= 2 ? '' : 'none'; });
@@ -302,14 +323,15 @@ function thumb(c){
   return t.toDataURL('image/jpeg', 0.6);
 }
 
-function build(imgs, th, r){
+function build(imgs, th, r, links){
   ratio = r; orig = imgs.length; padIdx = -1; imgs = imgs.slice(); th = th.slice();
+  const lk = (links || []).slice(); while (lk.length < orig) lk.push([]);
   // Odd page count: add a blank sheet before the back cover so it stays alone, like a printed magazine
   if (orig % 2 === 1){
     const b = blank(400, Math.round(400 * r)); padIdx = orig >= 3 ? orig - 1 : 1;
-    imgs.splice(padIdx, 0, b); th.splice(padIdx, 0, b);
+    imgs.splice(padIdx, 0, b); th.splice(padIdx, 0, b); lk.splice(padIdx, 0, []);
   }
-  pages = imgs; thumbs = th; total = pages.length; mode = null; cur = 0; anim = false;
+  pages = imgs; plinks = lk; thumbs = th; total = pages.length; mode = null; cur = 0; anim = false;
   clearBk(); buildThumbs();
   $('#loader').hidden = true; $('#bar').hidden = false; $('#aprev').hidden = false; $('#anext').hidden = false; closeThumbs();
   ctrls.forEach(b => b.disabled = false);
@@ -320,34 +342,49 @@ function build(imgs, th, r){
 // Each PDF page is normalized to a canvas with the cover's proportions, never stretched:
 // - double page (about 2x the cover's width): split into left and right pages
 // - any other size: fitted whole and centered on white
+// Maps a rectangle in source-canvas pixels to fractions (0..1) of the final page canvas, clipped to one half if split
+function mapLink(r, sx, sw, k, ox, oy, W, H){
+  const x0 = Math.max(Math.min(r[0], r[2]), sx), x1 = Math.min(Math.max(r[0], r[2]), sx + sw);
+  const y0 = Math.min(r[1], r[3]), y1 = Math.max(r[1], r[3]);
+  if (x1 - x0 < 2 || y1 - y0 < 2) return null;
+  return { x: (ox + (x0 - sx) * k) / W, y: (oy + y0 * k) / H, w: (x1 - x0) * k / W, h: (y1 - y0) * k / H };
+}
 async function renderPages(page, a0, W, H){
   const v0 = page.getViewport({ scale: 1 });
   const rr = (v0.width / v0.height) / a0;
-  const spread = rr > 1.6 && rr < 2.5;
+  const spread = rr > 1.85 && rr < 2.15;   // a true double page is ~2x the cover's width; a landscape single page is not
   const sc = spread ? H / v0.height : Math.min(W / v0.width, H / v0.height);
   const vp = page.getViewport({ scale: sc });
   const src = document.createElement('canvas'); src.width = Math.round(vp.width); src.height = Math.round(vp.height);
   await page.render({ canvasContext: src.getContext('2d'), viewport: vp }).promise;
+  let anns = [];   // links that already live inside the PDF (never allowed to break the rendering)
+  try {
+    anns = (await page.getAnnotations({ intent: 'display' }))
+      .filter(a => (a.url || a.unsafeUrl) && a.rect && /^(https?:|mailto:|tel:)/i.test(a.url || a.unsafeUrl))
+      .map(a => ({ url: a.url || a.unsafeUrl, r: vp.convertToViewportRectangle(a.rect) }));
+  } catch (e){ console.warn('links skipped', e); }
   const parts = spread ? [[0, src.width / 2], [src.width / 2, src.width / 2]] : [[0, src.width]];
   return parts.map(([sx, sw]) => {
     const c = document.createElement('canvas'); c.width = W; c.height = H;
     const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, W, H);
     const k = Math.min(W / sw, H / src.height), dw = sw * k, dh = src.height * k;
     x.drawImage(src, sx, 0, sw, src.height, (W - dw) / 2, (H - dh) / 2, dw, dh);
-    return c;
+    const links = anns.map(a => { const m = mapLink(a.r, sx, sw, k, (W - dw) / 2, (H - dh) / 2, W, H); return m && Object.assign(m, { url: a.url }); }).filter(Boolean);
+    return { c, links };
   });
 }
 async function convertPdf(pdf){
   const n = Math.min(pdf.numPages, 300);
   const first = await pdf.getPage(1), f0 = first.getViewport({ scale: 1 });
   const a0 = f0.width / f0.height, W = 1400, H = Math.round(W / a0);
-  const imgs = [], th = [];
+  const imgs = [], th = [], lks = [];
   for (let i = 1; i <= n; i++){
     const page = i === 1 ? first : await pdf.getPage(i);
-    for (const c of await renderPages(page, a0, W, H)){ imgs.push(c.toDataURL('image/jpeg', 0.85)); th.push(thumb(c)); }
+    for (const { c, links } of await renderPages(page, a0, W, H)){ imgs.push(c.toDataURL('image/jpeg', 0.85)); th.push(thumb(c)); lks.push(links); }
     setProg(i / n); $('#ltxt').textContent = 'Loading document · ' + Math.round(i / n * 100) + '%';
   }
-  build(imgs, th, H / W);
+  HOTSPOTS.forEach(h => { const l = lks[h.page - 1]; if (l && /^(https?:|mailto:|tel:)/i.test(h.url)) l.push({ x: h.x / 100, y: h.y / 100, w: h.w / 100, h: h.h / 100, url: h.url }); });
+  build(imgs, th, H / W, lks);
 }
 
 function showError(){
@@ -407,6 +444,7 @@ bk.addEventListener('pointerup', e => {
   const dx = e.clientX - px, dy = e.clientY - py;
   if (zoom <= 1.01 && Math.abs(dx) > 45 && Math.abs(dy) < 90){ go(dx < 0 ? 1 : -1); return; }
   if (Math.abs(dx) < 10 && Math.abs(dy) < 10){
+    if (e.target.closest && e.target.closest('.lk')) return;   // a tap on a link opens it, it doesn't turn the page
     const r = bk.getBoundingClientRect(), f = (e.clientX - r.left) / r.width;
     go(f > (mode === 'single' ? 0.4 : 0.5) ? 1 : -1);
   }
