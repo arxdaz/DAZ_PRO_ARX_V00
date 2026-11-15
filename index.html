@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Archive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&display=swap" rel="stylesheet">
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
   --bg:#e6eef0;--a1:rgba(45,212,191,.36);--a2:rgba(86,140,255,.30);--a3:rgba(120,230,170,.28);--a4:rgba(150,130,255,.16);
@@ -40,9 +43,16 @@ header{position:relative;z-index:20;padding:13px 130px;border-width:0 0 1px;text
 .lang button{border:0;background:transparent;color:var(--mut);font-size:12px;letter-spacing:.1em;height:26px;padding:0 11px;border-radius:999px;cursor:pointer;transition:background .2s,color .2s}
 .lang button:hover{color:var(--fg)}
 .lang button.on{background:var(--glassx);color:var(--act)}
-@media (max-width:560px){header{padding:12px 84px}.cbtn{left:10px;width:36px;padding:0}.cbtn span{display:none}.cmenu{left:10px}.lang{right:10px}}
-h1{margin:0;font-size:14px;font-weight:400;letter-spacing:.1em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-@media (max-width:560px){h1{white-space:normal;font-size:12px;line-height:1.5}}
+@media (max-width:560px){
+  header{display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"c . l" "t t t";align-items:center;row-gap:3px;padding:6px 10px 8px;text-align:center}
+  .cbtn{position:static;transform:none;grid-area:c;width:36px;height:34px;padding:0}
+  .cbtn span{display:none}
+  .lang{position:static;transform:none;grid-area:l}
+  .lang button{padding:0 9px}
+  header h1{grid-area:t;font-size:clamp(11.5px,3.5vw,13.5px);letter-spacing:.06em}
+  .cmenu{left:10px}
+}
+h1{font-family:'Tenor Sans','Century Gothic',CenturyGothic,'URW Gothic',sans-serif;margin:0;font-size:15px;font-weight:400;letter-spacing:.1em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #stage{flex:1;min-height:0;position:relative;overflow:hidden}
 #scroll{position:absolute;inset:0;overflow:hidden;overscroll-behavior:none;display:flex}
 .zoomed #scroll{overflow:auto}
