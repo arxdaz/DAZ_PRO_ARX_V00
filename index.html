@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Archive</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&display=swap" rel="stylesheet">
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
   --bg:#e6eef0;--a1:rgba(45,212,191,.36);--a2:rgba(86,140,255,.30);--a3:rgba(120,230,170,.28);--a4:rgba(150,130,255,.16);
@@ -26,7 +23,7 @@ body::before{content:"";position:fixed;inset:-15%;z-index:-1;pointer-events:none
 @keyframes aurora{0%{transform:translate3d(-2%,-1%,0) scale(1) rotate(0)}50%{transform:translate3d(2%,2%,0) scale(1.08) rotate(3deg)}100%{transform:translate3d(-1%,3%,0) scale(1.04) rotate(-3deg)}}
 @media (prefers-reduced-motion:reduce){body::before,.dz-fl,.dz-halo,.idle .arw{animation:none!important}}
 header,#bar{background:var(--glass);border:1px solid var(--glassb);-webkit-backdrop-filter:blur(22px) saturate(1.6);backdrop-filter:blur(22px) saturate(1.6)}
-header{position:relative;z-index:20;padding:13px 130px;border-width:0 0 1px;text-align:center}
+header{position:relative;z-index:20;padding:10px 130px;border-width:0 0 1px;text-align:center}
 .cbtn{position:absolute;left:16px;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;gap:8px;height:34px;padding:0 15px;border-radius:999px;font-size:13px;letter-spacing:.06em;color:var(--fg);background:var(--glass);border:1px solid var(--glassb);cursor:pointer;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);transition:background .2s}
 .cbtn:hover,.cbtn.act{background:var(--glassx)}
 .cbtn svg,.citem svg{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
@@ -44,15 +41,15 @@ header{position:relative;z-index:20;padding:13px 130px;border-width:0 0 1px;text
 .lang button:hover{color:var(--fg)}
 .lang button.on{background:var(--glassx);color:var(--act)}
 @media (max-width:560px){
-  header{display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"c . l" "t t t";align-items:center;row-gap:3px;padding:6px 10px 8px;text-align:center}
-  .cbtn{position:static;transform:none;grid-area:c;width:36px;height:34px;padding:0}
+  header{padding:10px 76px}
+  .cbtn{left:8px;width:34px;height:32px;padding:0}
   .cbtn span{display:none}
-  .lang{position:static;transform:none;grid-area:l}
-  .lang button{padding:0 9px}
-  header h1{grid-area:t;font-size:clamp(11.5px,3.5vw,13.5px);letter-spacing:.06em}
-  .cmenu{left:10px}
+  .cmenu{left:8px}
+  .lang{right:8px;padding:2px}
+  .lang button{height:26px;padding:0 6px;font-size:10px;letter-spacing:.04em}
+  header h1{font-size:12.5px;letter-spacing:.02em}
 }
-h1{font-family:'Tenor Sans','Century Gothic',CenturyGothic,'URW Gothic',sans-serif;margin:0;font-size:15px;font-weight:400;letter-spacing:.1em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+h1{margin:0;font-size:14px;line-height:1.5;font-weight:400;letter-spacing:.1em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #stage{flex:1;min-height:0;position:relative;overflow:hidden}
 #scroll{position:absolute;inset:0;overflow:hidden;overscroll-behavior:none;display:flex}
 .zoomed #scroll{overflow:auto}
@@ -455,7 +452,7 @@ function showError(){
 function srcFor(l){ return { url: PDFS[l] }; }
 async function loadPDF(keep){
   const tok = ++loadTok;
-  document.title = TITLE; $('#title').textContent = TITLE;
+  document.title = TITLE; $('#title').textContent = TITLE; fitTitle();
   const ld = $('#loader'); ld.classList.remove('done', 'err'); ld.hidden = false;
   $('#ltxt').textContent = T('loading'); $('#lsub').textContent = T('lsub');
   ready = false; $('#bar').hidden = true; $('#aprev').hidden = true; $('#anext').hidden = true; closeThumbs();
@@ -475,6 +472,11 @@ function setLang(l){
   loadPDF(keep);
 }
 
+function fitTitle(){   // shrink the header title until it fits on its single line; it stays centered
+  const h = $('#title'); h.style.fontSize = '';
+  let s = parseFloat(getComputedStyle(h).fontSize);
+  while (h.scrollWidth > h.clientWidth + 0.5 && s > 8){ s -= 0.25; h.style.fontSize = s + 'px'; }
+}
 function setZoomUI(){
   const mx = zoom >= 2.99;
   $('#zin').classList.toggle('max', mx); $('#zin').title = T(mx ? 'zout' : 'zin');
@@ -533,6 +535,8 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeThumbs();
 });
 window.addEventListener('resize', sizeBook);
+window.addEventListener('resize', fitTitle);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitTitle);
 
 // ---- zoom: pinch / ctrl+wheel / trackpad only scale the document, never the interface ----
 let pinching = false, lastPinch = 0, pd0 = 1, pz0 = 1, gz0 = 1;
